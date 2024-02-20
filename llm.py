@@ -3,12 +3,13 @@ import transformers
 
 
 from transformers import LlamaForCausalLM, LlamaTokenizer
+from langchain.llms.huggingface_pipeline import HuggingFacePipeline
 import os
 
 def get_llm(model_name = 'meta-llama/Llama-2-7b-chat-hf'):
     
     bnb_config = transformers.BitsAndBytesConfig(
-        load_in_4bit=True,
+        load_in_4bit=False, # True
         bnb_4bit_quant_type='nf4',
         bnb_4bit_use_double_quant=True,
         bnb_4bit_compute_dtype=torch.float16 # bfloat16
@@ -40,4 +41,4 @@ def get_llm(model_name = 'meta-llama/Llama-2-7b-chat-hf'):
         repetition_penalty=1.1  # without this output begins repeating
     )
     
-    return generate_text
+    return HuggingFacePipeline(pipeline=generate_text)
